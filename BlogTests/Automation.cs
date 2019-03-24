@@ -129,7 +129,7 @@
             CheckWeAreOnHomePage();
             homePage.ClickOnLogInButton();
             Assert.AreEqual("Log in", loginPage.LoginPageTitle.Text);
-            loginPage.FillEmail("test@abv.bg");
+            loginPage.FillEmail("ttt@abv.bg");
             loginPage.FillPassword("test");
             loginPage.ClickLogIn();
             Assert.AreEqual("Log in", loginPage.LoginPageTitle.Text);
@@ -142,18 +142,25 @@
             CheckSuccessfulSignIn();
             homePage.ClickOnCreateButton();
             Assert.AreEqual("Create Article", createArticlePage.CreateArticlePageTitle.Text);
-            createArticlePage.EnterTitle("test");
-            createArticlePage.EnterContent("test test test");
+            createArticlePage.EnterTitle("bbb");
+            createArticlePage.EnterContent("description");
             createArticlePage.ClickCreateButton();
             CheckWeAreOnHomePage();
-            homePage.CreatedArticleLink.Text.Should().Be("test");
+            homePage.CreatedArticleLink.Text.Should().Be("bbb");
         }
 
 
         [Test]
         public void CreateArticleAndDeleteIt()
         {
-            CreateArticle();
+            CheckSuccessfulSignIn();
+            homePage.ClickOnCreateButton();
+            Assert.AreEqual("Create Article", createArticlePage.CreateArticlePageTitle.Text);
+            createArticlePage.EnterTitle("test");
+            createArticlePage.EnterContent("test test test");
+            createArticlePage.ClickCreateButton();
+            CheckWeAreOnHomePage();
+            homePage.CreatedArticleLink.Text.Should().Be("test");
             homePage.ClickOnCreatedArticleLink();
             Assert.AreEqual("test test test", articleDetailsPage.FirstArticleText.Text);
             articleDetailsPage.ClickOnDeleteButton();
@@ -221,8 +228,8 @@
             managePage.ClickOnChangePasswordLink();
             Assert.AreEqual("Change Password", changePasswordPage.ChangePasswordPageTitle.Text);
             changePasswordPage.FillCurrentPassword("test");
-            changePasswordPage.FillNewPassword("qa1");
-            changePasswordPage.FillConfirmPassword("qa1");
+            changePasswordPage.FillNewPassword("test");
+            changePasswordPage.FillConfirmPassword("test");
             changePasswordPage.ClickChangePasswordButton();
             Assert.AreEqual("Your password has been changed.", managePage.ManagePageSuccess.Text);
         }
