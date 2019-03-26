@@ -111,6 +111,23 @@
         }
 
         [Test]
+        public void CheckUnsuccessfulRegistrationWithEmptyPass()
+        {
+            CheckWeAreOnHomePage();
+            homePage.ClickOnRegisterButton();
+            Assert.AreEqual("Register", regPage.RegistrationPageTitle.Text);
+
+            var path = Path.GetFullPath(
+               Directory.GetCurrentDirectory() +
+               "/../../../Jsons/UserRegistrationWithEmptyPass.json");
+            var user = RegistrationUser.FromJson(File.ReadAllText(path));
+
+            regPage.FillForm(user);
+            Assert.AreEqual("Register", regPage.RegistrationPageTitle.Text);
+            Assert.AreEqual("The Password field is required.", regPage.UnsuccessfulRegistrationMessage.Text);
+        }
+
+        [Test]
         public void CheckSuccessfulSignIn()
         {
             CheckWeAreOnHomePage();
@@ -136,22 +153,8 @@
             Assert.AreEqual("Invalid login attempt.", loginPage.InvalidLoginMessage.Text);
         }
 
-        [Test]
+       
         public void CreateArticle()
-        {
-            CheckSuccessfulSignIn();
-            homePage.ClickOnCreateButton();
-            Assert.AreEqual("Create Article", createArticlePage.CreateArticlePageTitle.Text);
-            createArticlePage.EnterTitle("bbb");
-            createArticlePage.EnterContent("description");
-            createArticlePage.ClickCreateButton();
-            CheckWeAreOnHomePage();
-            homePage.CreatedArticleLink.Text.Should().Be("bbb");
-        }
-
-
-        [Test]
-        public void CreateArticleAndDeleteIt()
         {
             CheckSuccessfulSignIn();
             homePage.ClickOnCreateButton();
@@ -161,8 +164,16 @@
             createArticlePage.ClickCreateButton();
             CheckWeAreOnHomePage();
             homePage.CreatedArticleLink.Text.Should().Be("test");
+        }
+
+
+        [Test]
+        public void CreateArticleEditAndDeleteIt()
+        {
+            CreateArticle();
             homePage.ClickOnCreatedArticleLink();
             Assert.AreEqual("test test test", articleDetailsPage.FirstArticleText.Text);
+            EditArticle();
             articleDetailsPage.ClickOnDeleteButton();
             deleteArticlePage.ClickSecondDeleteButton();
             CheckWeAreOnHomePage();
@@ -192,12 +203,9 @@
             
         }
 
-        [Test]
-        public void CreateEditDeleteArticle()
+        
+        public void EditArticle()
         {
-            CreateArticle();
-            homePage.ClickOnCreatedArticleLink();
-            Assert.AreEqual("test test test", articleDetailsPage.FirstArticleText.Text);
             articleDetailsPage.ClickOnEditButton();
             Assert.AreEqual("Edit Article", editArticlePage.EditArticlePageTitle.Text);
             editArticlePage.EnterTitle("edit");
@@ -206,11 +214,7 @@
             CheckWeAreOnHomePage();
             homePage.ClickOnEditedArticleLink();
             Assert.AreEqual("edit edit", articleDetailsPage.FirstArticleText.Text);
-            articleDetailsPage.ClickOnDeleteButton();
-            deleteArticlePage.ClickSecondDeleteButton();
-            CheckWeAreOnHomePage();
-            //Assert.IsNull(homePage.EditedArticleLink);
-            //to-do check the new article is NOT on home page
+            
         }
 
         [Test]
@@ -233,5 +237,6 @@
             changePasswordPage.ClickChangePasswordButton();
             Assert.AreEqual("Your password has been changed.", managePage.ManagePageSuccess.Text);
         }
+
     }
 }

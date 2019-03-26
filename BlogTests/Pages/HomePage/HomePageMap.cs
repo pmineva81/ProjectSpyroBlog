@@ -16,6 +16,8 @@
 
         public IWebElement CreatedArticleLink => Wait.Until(d => { return d.FindElement(By.PartialLinkText("test")); });
 
+        public IWebElement CreatedArticleLinkbbb => Wait.Until(d => { return d.FindElement(By.PartialLinkText("bbb")); });
+
         public IWebElement LogOffButton => Wait.Until(d => { return d.FindElement(By.PartialLinkText("Log off")); });
 
         public IWebElement EditedArticleLink => Wait.Until(d => { return d.FindElement(By.PartialLinkText("edit")); });
